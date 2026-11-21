@@ -1,10 +1,10 @@
-import streamlit as st
+import os
 import pandas as pd
 import plotly.express as px
-import os
+import streamlit as st
 
 st.set_page_config(
-    page_title="Health Care Awareness & Impact",
+    page_title="HEALTH CARE AWARENESS PROGRAMS AND THEIR IMPACT",
     page_icon="🏥",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -12,109 +12,139 @@ st.set_page_config(
 
 LOGO_FILE = "_Andhra_Pradesh logo.webp"
 
-# --- CUSTOM CSS ---
+# Only group / field photographs placed in the `images/` folder
+GROUP_PHOTOS = [
+    {
+        "file": "images/group_survey.jpg",
+        "caption": "Group Fieldwork: Health & Hygiene Survey — Chakali Street, Nellore"
+    },
+    {
+        "file": "images/group_hospital.jpg",
+        "caption": "Group Visit: Government Hospital & Early Intervention Centre, Nellore"
+    },
+    {
+        "file": "images/group_team.jpg",
+        "caption": "CSP Group Team & Coordination Photo"
+    }
+]
+
 st.markdown("""
     <style>
     [data-testid="stSidebar"] {
-        background-color: #162447;
+        background-color: #2b2d31;
     }
     [data-testid="stSidebar"] * {
-        color: #ffffff !important;
+        color: #f1f3f5 !important;
     }
-    .header-title {
-        font-size: 26px;
+    .top-banner {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 12px 18px;
+    }
+    .main-banner-title {
+        font-size: 25px;
         font-weight: 800;
-        color: #1b263b;
+        color: #111827;
+        letter-spacing: 0.4px;
         margin: 0;
-        letter-spacing: 0.5px;
+        line-height: 1.25;
     }
-    .header-subtitle {
+    .main-banner-sub {
+        font-size: 13px;
+        color: #4b5563;
+        margin-top: 4px;
+    }
+    .status-ok {
+        background-color: #edf7ed;
+        color: #1e4620;
+        border-radius: 6px;
+        padding: 10px 14px;
         font-size: 14px;
-        color: #5c677d;
-        margin: 2px 0 0 0;
+        font-weight: 500;
+        margin-bottom: 16px;
+    }
+    .kpi-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 16px;
+    }
+    .kpi-label {
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 6px;
+    }
+    .kpi-val {
+        font-size: 26px;
+        font-weight: 700;
+        color: #111827;
+    }
+    .thank-card {
+        background: #f8fafc;
+        border-left: 5px solid #2b2d31;
+        border-radius: 8px;
+        padding: 18px 20px;
+        margin-top: 16px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- SIDEBAR ---
-with st.sidebar:
-    col_l, col_c, col_r = st.columns([1, 2, 1])
-    with col_c:
-        if os.path.exists(LOGO_FILE):
-            st.image(LOGO_FILE, use_container_width=True)
-        else:
-            st.markdown("## 🏥")
-    st.markdown("<h3 style='text-align: center; margin-bottom: 0;'>AP HEALTH AWARENESS</h3>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; font-size: 11px; color: #adb5bd !important;'>HEALTHCARE AWARENESS & IMPACT</p>", unsafe_allow_html=True)
-    st.divider()
-    st.markdown("**MAIN MENU**")
-    menu = st.radio(
-        "Navigation",
-        ["Dashboard", "Awareness Programs", "District Monitoring", "Impact Analysis", "Health Assistant"],
-        label_visibility="collapsed"
-    )
-
-# --- TOP HEADER ---
-top_col1, top_col2 = st.columns([1, 9])
-with top_col1:
-    if os.path.exists(LOGO_FILE):
-        st.image(LOGO_FILE, width=85)
-    else:
-        st.markdown("# 🏥")
-with top_col2:
-    st.markdown("""
-        <div style="padding-top: 8px;">
-            <div class="header-title">ANDHRA PRADESH - HEALTH CARE AWARENESS</div>
-            <div class="header-subtitle">Community Health Care Awareness Programs and Impact Monitoring System</div>
-        </div>
-    """, unsafe_allow_html=True)
-
-st.success("Application is running successfully")
-
-# --- DATA ---
-data = pd.DataFrame({
-    "District": ["Nellore", "Guntur", "Visakhapatnam", "Tirupati", "Kurnool"],
-    "Program": ["Maternal Nutrition", "Anemia Prevention", "Child Immunization", "Hygiene & Sanitation", "Diabetes Screening"],
-    "Participants": [1250, 1580, 1920, 1400, 1650],
-    "Before_Awareness_%": [42, 38, 50, 45, 40],
-    "After_Awareness_%": [84, 81, 89, 86, 82],
-    "Checkups_Done": [980, 1210, 1700, 1150, 1340]
-})
-
-# --- PAGES ---
-if menu == "Dashboard":
-    st.subheader("📊 Monitoring Dashboard")
-    m1, m2, m3, m4 = st.columns(4)
-    m1.metric("Total Programs", len(data))
-    m2.metric("Total Participants", f"{data['Participants'].sum():,}")
-    m3.metric("Checkups Completed", f"{data['Checkups_Done'].sum():,}")
-    m4.metric("Avg Impact Gain", "+41.4%")
-
-    st.divider()
-    st.subheader("📈 Awareness Impact: Before vs After Program")
-    fig = px.bar(
-        data,
-        x="Program",
-        y=["Before_Awareness_%", "After_Awareness_%"],
-        barmode="group",
-        color_discrete_sequence=["#8d99ae", "#162447"]
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
-elif menu == "Awareness Programs":
-    st.subheader("🩺 Active Health Care Awareness Programs")
-    st.dataframe(data, use_container_width=True)
-
-elif menu == "District Monitoring":
-    st.subheader("📍 District-Wise Reach")
-    district = st.selectbox("Select District", data["District"].unique())
-    st.table(data[data["District"] == district])
-
-elif menu == "Impact Analysis":
-    st.subheader("📉 Program Impact Comparison")
-    fig_pie = px.pie(data, names="District", values="Participants", hole=0.4)
-    st.plotly_chart(fig_pie, use_container_width=True)
-
-elif menu == "Health Assistant":
-    st.subheader("💬 Community Health Info")
-    st.info("Select a program from the sidebar to view awareness guidelines and district statistics.")
+day_logs_df = pd.DataFrame({
+    "Week": [
+        "Week 1", "Week 1", "Week 1", "Week 1", "Week 1", "Week 1",
+        "Week 2", "Week 2", "Week 2", "Week 2", "Week 2", "Week 2",
+        "Week 3", "Week 3", "Week 3", "Week 3", "Week 3", "Week 3",
+        "Week 4", "Week 4", "Week 4", "Week 4", "Week 4", "Week 4",
+        "Week 5", "Week 5", "Week 5", "Week 5", "Week 5", "Week 5",
+        "Week 6", "Week 6", "Week 6", "Week 6", "Week 6", "Week 6"
+    ],
+    "Day & Date": [
+        "Day 1 (01-06-2026)", "Day 2 (02-06-2026)", "Day 3 (03-06-2026)",
+        "Day 4 (04-06-2026)", "Day 5 (05-06-2026)", "Day 6 (06-06-2026)",
+        "Day 1 (08-06-2026)", "Day 2 (09-06-2026)", "Day 3 (10-06-2026)",
+        "Day 4 (11-06-2026)", "Day 5 (12-06-2026)", "Day 6 (13-06-2026)",
+        "Day 1 (15-06-2026)", "Day 2 (16-06-2026)", "Day 3 (17-06-2026)",
+        "Day 4 (18-06-2026)", "Day 5 (19-06-2026)", "Day 6 (20-06-2026)",
+        "Day 1 (22-06-2026)", "Day 2 (23-06-2026)", "Day 3 (24-06-2026)",
+        "Day 4 (25-06-2026)", "Day 5 (26-06-2026)", "Day 6 (27-06-2026)",
+        "Day 1 (29-06-2026)", "Day 2 (30-06-2026)", "Day 3 (01-07-2026)",
+        "Day 4 (02-07-2026)", "Day 5 (03-07-2026)", "Day 6 (04-07-2026)",
+        "Day 1 (06-07-2026)", "Day 2 (07-07-2026)", "Day 3 (08-07-2026)",
+        "Day 4 (09-07-2026)", "Day 5 (10-07-2026)", "Day 6 (11-07-2026)"
+    ],
+    "Activity Summary": [
+        "Baseline survey on health care & hygiene awareness",
+        "Spoke with residents on check-ups, balanced diet & hygiene",
+        "Gathered details on government health schemes & facilities",
+        "Session on disease prevention, vaccination & sanitation",
+        "House visits & pamphlets on nutrition and safe water",
+        "Reviewed week activities & collected community feedback",
+        "Studied local dietary habits & food challenges",
+        "Talks on healthy food vs. junk food risks",
+        "Distributed fruits, nuts & whole-grain healthy snacks",
+        "Cooking demo & nutrition label reading workshop",
+        "House visits on avoiding junk food & healthy meals",
+        "Collected participant feedback & suggestions",
+        "Checked plant cover in the locality",
+        "Distributed saplings to children",
+        "Identified planting spots with children & parents",
+        "Explained benefits of trees, clean air & oxygen",
+        "Guided children on daily watering responsibility",
+        "Collected plantation photos & encouraged more planting",
+        "House visits on Swachh Bharat & cleanliness",
+        "Identified littered area with dust & plastic waste",
+        "Discussed cleanliness & permission with municipal commissioner",
+        "Coordinated with municipal workers to clean streets & drains",
+        "Campaign on waste segregation & mosquito-borne diseases",
+        "Distributed sanitizers & hygiene items",
+        "Visited Government Hospital & identified key units",
+        "Met hospital staff & obtained awareness permission",
+        "Observed child screening & growth monitoring at Early Intervention Centre",
+        "Interacted with doctor on early detection & regular check-ups",
+        "Ward interaction with mother & infant on nutrition & vaccination",
+        "Compiled weekly report & staff feedback",
+        "Identified elderly care homes in the locality",
+        "Obtained permission from elderly home staff",
+        "Distributed nutritious food to elderly residents",
+        "Distributed healthy food at another elderly home
