@@ -225,10 +225,10 @@ with st.sidebar:
             "Day-Wise Logs",
             "Abstract",
             "Diagram & Modules",
-            "Conclusion",
             "Graphs",
             "Team Members (Single Photos)",
             "Group Photos",
+            "Conclusion",
             "Thank You"
         ],
         label_visibility="collapsed"
@@ -253,7 +253,7 @@ st.markdown('<div class="status-ok">Application is running successfully</div>', 
 if menu == "Project Structure & Overview":
     st.subheader("Project Structure Plan")
     if os.path.exists(STRUCTURE_PLAN_IMG):
-        st.image(STRUCTURE_PLAN_IMG, caption="Project Flow: Topic Name, Day Logs, Abstract, Diagram, Modules, Conclusion & Graph", width=520)
+        st.image(STRUCTURE_PLAN_IMG, caption="Project Flow: Topic Name, Day Logs, Abstract, Diagram, Modules, Graph, Conclusion & Thank You", width=520)
     else:
         st.warning("Upload the project plan photo at `images/structure_plan.jpg`")
 
@@ -320,14 +320,6 @@ elif menu == "Diagram & Modules":
     with t5:
         st.write("Community Service Project — Sree Venkateswara College of Engineering, Nellore.")
 
-elif menu == "Conclusion":
-    st.subheader("Conclusion")
-    st.write(
-        "Health care awareness, clean surroundings, balanced nutrition, and timely medical check-ups help "
-        "prevent illness and improve overall community health. Combining direct field outreach with simple "
-        "digital awareness pages encourages families and children to adopt lasting healthy habits."
-    )
-
 elif menu == "Graphs":
     st.subheader("Present Generation Health & Lifestyle Graph")
     fig_gen = px.bar(
@@ -369,6 +361,14 @@ elif menu == "Group Photos":
             else:
                 st.warning(f"Upload `{item['file']}`")
             st.markdown(f'<div class="group-line">{item["line"]}</div>', unsafe_allow_html=True)
+
+elif menu == "Conclusion":
+    st.subheader("Conclusion")
+    st.write(
+        "Health care awareness, clean surroundings, balanced nutrition, and timely medical check-ups help "
+        "prevent illness and improve overall community health. Combining direct field outreach with simple "
+        "digital awareness pages encourages families and children to adopt lasting healthy habits."
+    )
 
 elif menu == "Thank You":
     if os.path.exists(THANK_YOU_IMG):
